@@ -29,7 +29,9 @@
         <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
             <h2 class="text-2xl font-bold mb-4">Our Commitment</h2>
             <p class="text-slate-600 mb-6 leading-relaxed">
-                This platform connects civil servants with **FPAC-certified financial planners** who specialize in federal benefits. 
+                This platform connects civil servants with 
+                <a href="https://www.fpassociation.ca/members" target="_blank" class="text-blue-600 underline font-semibold hover:text-blue-800">FPAC-certified financial planners</a> 
+                who specialize in federal benefits. 
                 <span class="font-semibold text-slate-900">Transparency is our core value:</span> 40% of all member fees are strictly dedicated to funding an advertising campaign on YouTube and podcasts to reach civil servants in need of guidance.
             </p>
         </div>
@@ -45,15 +47,16 @@
 
     <footer class="bg-slate-900 text-white py-16 px-6 mt-20">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-2xl font-bold mb-4">Are you a Qualified Financial Planner?</h2>
-            <p class="text-slate-400 mb-8">Exclusive referral rights are available for FPAC members in good standing. Support those who served Canada.</p>
+            <h2 class="text-2xl font-bold mb-4">Are you an FPAC member interested in joining this initiative?</h2>
+            <p class="text-slate-400 mb-8">Exclusive referral rights are available for FPAC members in good standing.</p>
             <a href="mailto:watt.jason@gmail.com" class="bg-white text-slate-900 px-8 py-3 rounded-lg font-bold hover:bg-slate-200 transition">Contact Jason Watt</a>
         </div>
     </footer>
 
     <script>
         const regions = [
-            { name: "Ottawa (NCR - ON)", count: 92995, hub: "National Capital", url: null },
+            // Ottawa updated to flat $5,000 as requested
+            { name: "Ottawa (NCR - ON)", count: 92995, hub: "National Capital", url: null, customPrice: 5000 },
             { name: "Gatineau (NCR - QC)", count: 36500, hub: "Major HQs", url: null },
             { name: "GTA (Toronto CMA)", count: 26600, hub: "Largest Regional Hub", url: null },
             { name: "Montreal", count: 14120, hub: "Quebec Operations", url: null },
@@ -73,7 +76,10 @@
         const grid = document.getElementById('region-grid');
 
         regions.forEach(region => {
-            const price = Math.round(region.count * 0.10).toLocaleString();
+            // Logic to use customPrice if it exists, otherwise calculate 10%
+            const priceValue = region.customPrice ? region.customPrice : Math.round(region.count * 0.10);
+            const priceDisplay = priceValue.toLocaleString();
+            
             const isSold = region.url !== null;
             
             const card = document.createElement('div');
@@ -84,11 +90,11 @@
                 actionHtml = `<a href="${region.url}" target="_blank" class="w-full bg-slate-900 text-white text-center py-2 rounded font-semibold mt-4">Connect with Advisor</a>`;
             } else {
                 const mailSubject = encodeURIComponent(`Inquiry: Purchase referral rights for ${region.name}`);
-                const mailBody = encodeURIComponent(`I am an FPAC member interested in the ${region.name} region listing for $${price}.`);
+                const mailBody = encodeURIComponent(`I am an FPAC member interested in the ${region.name} region listing for $${priceDisplay}.`);
                 actionHtml = `
                     <div class="mt-4 pt-4 border-t border-slate-100">
                         <p class="text-xs text-slate-400 uppercase font-bold tracking-tighter">Availability: Open</p>
-                        <p class="text-lg font-bold text-slate-900">$${price} <span class="text-sm font-normal text-slate-500">to list</span></p>
+                        <p class="text-lg font-bold text-slate-900">$${priceDisplay} <span class="text-sm font-normal text-slate-500">to list</span></p>
                         <a href="mailto:watt.jason@gmail.com?subject=${mailSubject}&body=${mailBody}" class="block w-full border border-slate-300 text-slate-700 text-center py-2 rounded font-semibold mt-2 hover:bg-slate-50">Purchase Rights</a>
                     </div>`;
             }
